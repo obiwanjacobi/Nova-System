@@ -4,7 +4,10 @@
 #include "avr/DigitalOutputPin.h"
 #include "util/delay.h"
 
-typedef ATL::MCU::DigitalOutputPin<ATL::MCU::PortB, ATL::MCU::Pin5> LEDPIN;
+// use test hardware
+#define TEST_ON_ARDUINO
+
+typedef ATL::MCU::DigitalOutputPin<ATL::MCU::PortD, ATL::MCU::Pin2> LEDPIN;
 
 extern LEDPIN led;
 

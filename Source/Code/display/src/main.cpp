@@ -1,6 +1,7 @@
 #include "display.h"
-
+#include "testSPI.h"
 #include "debug.h"
+
 #include "avr/Port.h"
 #include "util/delay.h"
 #include <stdint.h>
@@ -12,9 +13,12 @@ LEDPIN led(false);
 
 int main()
 {
-    //_delay_ms(200);
 
-    TestDisplay();
+    InitDisplay();
+
+    TestSPI();
+
+    // _delay_ms(2000);
 
     while (true)
     {

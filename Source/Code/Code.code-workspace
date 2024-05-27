@@ -1,0 +1,16 @@
+{
+    "folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "display",
+			"path": "display"
+		},
+		{
+			"name": "Nova System",
+			"path": "../.."
+		}
+	],
+    "settings": {}
+}
