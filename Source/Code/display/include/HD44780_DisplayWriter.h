@@ -40,13 +40,18 @@ namespace ATL
      *  `bool getEnableBlink()` (HD44780_Controller).
      */
     template <class BaseT>
-    class HD44780_DisplayWriter : public DisplayWriter, public BaseT
+    class HD44780_DisplayWriter : public BaseT, public DisplayWriter
     {
     public:
+        inline BaseT &getBaseRef()
+        {
+            return static_cast<BaseT &>(*this);
+        }
+
         /** Calls the `TextWriter::Write` method.
          *  \param text points to a zer-terminated string.
          */
-        virtual void Write(const char *text)
+        void Write(const char *text) override
         {
             BaseT::Write(text);
         }
@@ -57,7 +62,7 @@ namespace ATL
          *  \param lineIndex indicates the display line.
          *  \param columnIndex indicates the display column (char position).
          */
-        virtual void GoTo(uint8_t lineIndex, uint8_t columnIndex)
+        void GoTo(uint8_t lineIndex, uint8_t columnIndex) override
         {
             if (lineIndex == DontCare)
                 lineIndex = BaseT::getCursorRow();

@@ -9,23 +9,24 @@
 using namespace ATL;
 using namespace ATL::MCU;
 
-LEDPIN led(false);
+LEDPIN led;
 
 int main()
 {
-
     InitDisplay();
+    // TestDisplay();
 
+    _delay_ms(1000);
     TestSPI();
-
-    // _delay_ms(2000);
 
     while (true)
     {
-        // led.Write(true);
-        // _delay_ms(200);
-        // led.Write(false);
-        // _delay_ms(800);
+        led.Write(true);
+        LedOE.Write(true);
+        _delay_ms(100);
+        led.Write(false);
+        LedOE.Write(false);
+        _delay_ms(900);
     }
 
     return 0;

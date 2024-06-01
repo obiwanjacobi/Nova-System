@@ -45,6 +45,11 @@ namespace ATL
                     regPRR0() |= (1 << PRSPI);
             }
 
+            inline static bool getEnableSpi()
+            {
+                return regPRR0() & (1 << PRSPI);
+            }
+
         private:
             PowerReduction()
             {

@@ -24,13 +24,14 @@
 #include <stdint.h>
 #include "TextFormatInfo.h"
 
-namespace ATL {
+namespace ATL
+{
 
     /** The TextWriter class writes textual representations to a
      *  \tparam BaseT is derived from and implements 'void Write(byte)'.
      *  \tparam FormatInfoT implements all the public static fields defined by TextFormatInfo
      */
-    template<class BaseT, class FormatInfoT = TextFormatInfo>
+    template <class BaseT, class FormatInfoT = TextFormatInfo>
     class TextWriter : public BaseT
     {
     public:
@@ -39,7 +40,7 @@ namespace ATL {
          */
         inline void Write(const char value)
         {
-            Write((int16_t)value);
+            BaseT::Write(value);
         }
 
         /** Writes a textual representation for the value.
@@ -56,7 +57,7 @@ namespace ATL {
          */
         inline void Write(const char str[])
         {
-            const char* strPos = str;
+            const char *strPos = str;
 
             while (*strPos != '\0')
             {
@@ -238,11 +239,11 @@ namespace ATL {
             WriteInternal<uint32_t, 21>(integer, base);
         }
 
-        template<typename T, const uint8_t bufferSize>
+        template <typename T, const uint8_t bufferSize>
         void WriteInternal(T integer, uint8_t base)
         {
             char buffer[bufferSize];
-            char* strPos = &buffer[sizeof(buffer) - 1];
+            char *strPos = &buffer[sizeof(buffer) - 1];
 
             // we fill the buffer from back to front.
             *strPos = '\0';
@@ -250,7 +251,8 @@ namespace ATL {
             // safety check for base values that crash
             // base == 0 -> divide by zero
             // base == 1 -> endless loop
-            if (base < 2) base = 10;
+            if (base < 2)
+                base = 10;
 
             do
             {
@@ -259,8 +261,7 @@ namespace ATL {
 
                 char c = (char)(remainder - base * integer);
                 *--strPos = c < 10 ? c + '0' : c + 'A' - 10;
-            }
-            while (integer != 0);
+            } while (integer != 0);
 
             Write(strPos);
         }

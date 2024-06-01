@@ -21,7 +21,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #ifndef __HD44780_DRIVER_H__
 #define __HD44780_DRIVER_H__
 
-#include "debug.h"
 #include "HD44780_Profile.h"
 
 namespace ATL
@@ -132,16 +131,10 @@ namespace ATL
 
         inline void PulseEnable()
         {
-            led.Write(true);
-            //_delay_ms(100);
-
             _enable.Write(true);
             _delay_us(1);
             _enable.Write(false);
             TimingProfileT::WaitPulseEnable();
-
-            led.Write(false);
-            //_delay_ms(100);
         }
     };
 

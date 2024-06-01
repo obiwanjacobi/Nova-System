@@ -53,7 +53,7 @@ namespace ATL
 
         inline void SetRole(Role role)
         {
-            setControlBit(role == Role::Master, (1 << MSTR));
+            setControlBit(role == Role::Master, MSTR);
         }
 
         inline Role getRole() const
@@ -69,7 +69,12 @@ namespace ATL
             // set PRSPI bit in PRR (power reduction register) to enable SPI
             ATL::MCU::PowerReduction::setEnableSpi(enable);
             // set SPE in SPSR (SPI enable)
-            setControlBit(enable, (1 << SPE));
+            setControlBit(enable, SPE);
+        }
+
+        inline bool isEnabled()
+        {
+            return (ControlReg() & (1 << SPE)) && ATL::MCU::PowerReduction::getEnableSpi();
         }
 
         /**
@@ -79,11 +84,11 @@ namespace ATL
          */
         inline void setClockPolarity(ClockPolarity clock, ClockPolarity sample)
         {
-            setControlBit(clock == ClockPolarity::FallingEdge, (1 << CPOL));
+            setControlBit(clock == ClockPolarity::FallingEdge, CPOL);
             if (clock == ClockPolarity::RisingEdge)
-                setControlBit(sample == ClockPolarity::FallingEdge, (1 << CPHA));
+                setControlBit(sample == ClockPolarity::FallingEdge, CPHA);
             else
-                setControlBit(sample == ClockPolarity::RisingEdge, (1 << CPHA));
+                setControlBit(sample == ClockPolarity::RisingEdge, CPHA);
         }
 
         inline void setClockPrescaler(ClockPrescaler prescaler)
@@ -128,7 +133,7 @@ namespace ATL
         inline void setDataOrder(DataOrder order)
         {
             // set DORD in SPCR (data order)
-            setControlBit(order == DataOrder::LsbFirst, (1 << DORD));
+            setControlBit(order == DataOrder::LsbFirst, DORD);
         }
 
         inline DataOrder getDataOrder() const
@@ -159,26 +164,28 @@ namespace ATL
 
         inline void setEnableInterrupt(bool enable = true)
         {
-            setControlBit(enable, (1 << SPIE));
+            setControlBit(enable, SPIE);
         }
 
         /**
          * Only use this function when you do not use the SPI interrupt (ISR(SPI_STC_vect)).
          * Blocking function that waits for the data transfer to complete.
          */
-        inline void WaitForCompletion()
+        inline void WaitTransferComplete()
         {
+            if (!isEnabled())
+                return;
+
             // wait for completion
             while ((StatusReg() & (1 << SPIF)) == 0)
-            {
-            }
+                ;
         }
 
     private:
         inline static void setPrescaler(bool spr0, bool spr1, bool spi2x)
         {
-            setControlBit(spr0, (1 << SPR0));
-            setControlBit(spr1, (1 << SPR1));
+            setControlBit(spr0, SPR0);
+            setControlBit(spr1, SPR1);
             uint8_t bit = (1 << SPI2X);
             if (spi2x)
                 StatusReg() |= bit;
@@ -186,8 +193,9 @@ namespace ATL
                 StatusReg() &= ~bit;
         }
 
-        inline static void setControlBit(bool set, uint8_t bit)
+        inline static void setControlBit(bool set, uint8_t bitNumber)
         {
+            uint8_t bit = 1 << bitNumber;
             if (set)
                 ControlReg() |= bit;
             else

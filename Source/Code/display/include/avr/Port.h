@@ -22,7 +22,6 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #define __PORT_H__
 
 #include <stdint.h>
-// #include "avr/sfr_defs.h"
 #include "avr/io.h"
 
 namespace ATL

@@ -5,8 +5,6 @@
 
 #include "HD44780_Driver2.h"
 #include "HD44780_Controller2.h"
-#include "HD44780_Driver.h"
-#include "HD44780_Controller.h"
 #include "HD44780_DisplayWriter.h"
 #include "HD44780_View.h"
 #include "TextWriter.h"
@@ -82,6 +80,13 @@ void PrintBinary(uint8_t line, uint8_t value)
         mask >>= 1;
     }
 }
+
+void PrintChar(uint8_t line, const char value)
+{
+    lcd.GoTo(line, DisplayWriter::DontCare);
+    lcd.getBaseRef().Write(value);
+}
+
 void TestDisplay()
 {
     InitDisplay();
