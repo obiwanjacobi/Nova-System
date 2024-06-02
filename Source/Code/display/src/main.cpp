@@ -34,8 +34,9 @@ int main()
     InitDisplay();
     // TestDisplay();
 
-    // switchesAndLeds.SetSwitchLed(SwitchLed::Bottom6, true);
-    //  switchesAndLeds.TestPattern();
+    switchesAndLeds.SetDigit(Digit1, 1);
+    switchesAndLeds.SetDigit(Digit10, 1);
+    switchesAndLeds.SetDigit(Digit100, 1);
 
     while (true)
     {

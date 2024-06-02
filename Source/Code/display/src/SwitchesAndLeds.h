@@ -171,6 +171,8 @@ public:
 
     inline void SetDigit(Digit digit, uint8_t value)
     {
+        uint8_t index = (uint8_t)digit + 1;
+        _leds.SetAt(index, value);
     }
 
     inline void Transfer()
