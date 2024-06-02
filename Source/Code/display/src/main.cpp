@@ -2,6 +2,7 @@
 #include "debug.h"
 #include "LedTimeout.h"
 #include "SwitchesAndLeds.h"
+#include "SwitchLedOutput.h"
 
 #include "Time.h"
 #include "TimeoutTask2.h"
@@ -21,12 +22,15 @@ SwitchesAndLeds switchesAndLeds;
 
 typedef Scheduler<Time<Milliseconds>, 4> TaskScheduler;
 TimeoutTask2<LedTimeout<Ports::PortB, Pins::Pin2>, TaskScheduler, 100, 900> LedTask;
+TimeoutTask2<SwitchLedOutput, TaskScheduler, 100, 900> SwitchLedTask;
 
 int main()
 {
     sei();
     TimerCounter::Start();
     switchesAndLeds.Initialize();
+    SwitchLedTask.SetReference(&switchesAndLeds);
+
     InitDisplay();
     // TestDisplay();
 
@@ -38,14 +42,15 @@ int main()
         TaskScheduler::Update();
 
         LedTask.Execute();
+        SwitchLedTask.Execute();
 
         switchesAndLeds.Transfer();
         switchesAndLeds.SetSwitchedLeds();
 
-        switchesAndLeds.EnableOutput(true);
-        _delay_ms(100);
-        switchesAndLeds.EnableOutput(false);
-        _delay_ms(900);
+        // switchesAndLeds.EnableOutput(true);
+        // _delay_ms(100);
+        // switchesAndLeds.EnableOutput(false);
+        // _delay_ms(900);
     }
 
     return 0;

@@ -1,7 +1,7 @@
 #ifndef __LEDTIMEOUT_H__
 #define __LEDTIMEOUT_H__
 
-#include "TimeoutTask.h"
+#include "TimeoutTask2.h"
 #include "IdentifiableObject.h"
 #include "avr/DigitalOutputPin.h"
 

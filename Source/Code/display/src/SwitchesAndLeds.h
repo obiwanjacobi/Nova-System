@@ -13,8 +13,6 @@
 #include "avr/Port.h"
 #include <stdint.h>
 
-#include "display.h"
-
 using namespace ATL;
 using namespace ATL::MCU;
 
@@ -122,9 +120,6 @@ public:
 
     inline void SetSwitchedLeds()
     {
-        PrintBinary(0, _switches.GetAt(1));
-        PrintBinary(1, _switches.GetAt(2));
-
         for (uint8_t i = 0; i < _switches.getCapacity(); i++)
         {
             uint8_t sw = _switches.GetAt(i);
