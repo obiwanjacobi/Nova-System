@@ -167,6 +167,8 @@ public:
 
     inline void SetBarLed(Bar bar, Led led, bool value)
     {
+        uint8_t index = 10 - (uint8_t)bar;
+        SetSwitchLed(index, 6 - led, value);
     }
 
     inline void SetDigit(Digit digit, uint8_t value)

@@ -38,6 +38,9 @@ int main()
     switchesAndLeds.SetDigit(Digit10, 1);
     switchesAndLeds.SetDigit(Digit100, 1);
 
+    switchesAndLeds.SetBarLed(Bar2, Led0, true);
+    switchesAndLeds.SetBarLed(Bar3, Led3, true);
+
     while (true)
     {
         TaskScheduler::Update();
