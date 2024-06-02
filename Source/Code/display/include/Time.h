@@ -77,6 +77,8 @@ namespace ATL
             return resolution;
         }
 
+        inline static uint32_t ForClockCycles(uint32_t clockCylces);
+
     protected:
         /** Returns the raw time ticks.
          */
@@ -112,7 +114,7 @@ namespace ATL
     template <>
     inline uint32_t Time<TimeResolution::Milliseconds>::getMicroseconds(uint32_t ticks)
     {
-        return ticks * 1000;
+        return ticks * 1000L;
     }
 
     /** Specialization for Time in Microseconds.
@@ -120,7 +122,7 @@ namespace ATL
     template <>
     inline uint32_t Time<TimeResolution::Microseconds>::getMilliseconds(uint32_t ticks)
     {
-        return ticks / 1000;
+        return ticks / 1000L;
     }
 
     /** Specialization for Time in Microseconds.
@@ -129,6 +131,18 @@ namespace ATL
     inline uint32_t Time<TimeResolution::Microseconds>::getMicroseconds(uint32_t ticks)
     {
         return ticks;
+    }
+
+    template <>
+    inline uint32_t Time<TimeResolution::Milliseconds>::ForClockCycles(uint32_t clockCylces)
+    {
+        return clockCylces / (F_CPU / 1000L);
+    }
+
+    template <>
+    inline uint32_t Time<TimeResolution::Microseconds>::ForClockCycles(uint32_t clockCylces)
+    {
+        return clockCylces / (F_CPU / 1000000L);
     }
 
     /** The TimeEx class adds start-time and delta-time members to Time.

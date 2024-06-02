@@ -44,10 +44,69 @@ namespace ATL
                 else
                     regPRR0() |= (1 << PRSPI);
             }
-
             inline static bool getEnableSpi()
             {
                 return regPRR0() & (1 << PRSPI);
+            }
+
+            inline static void setEnableTimer0(bool enable = true)
+            {
+                if (enable)
+                    regPRR0() &= ~(1 << PRTIM0);
+                else
+                    regPRR0() |= (1 << PRTIM0);
+            }
+            inline static bool getEnableTimer0()
+            {
+                return regPRR0() & (1 << PRTIM0);
+            }
+
+            inline static void setEnableTimer1(bool enable = true)
+            {
+                if (enable)
+                    regPRR0() &= ~(1 << PRTIM1);
+                else
+                    regPRR0() |= (1 << PRTIM1);
+            }
+            inline static bool getEnableTimer1()
+            {
+                return regPRR0() & (1 << PRTIM1);
+            }
+
+            inline static void setEnableTimer2(bool enable = true)
+            {
+                if (enable)
+                    regPRR0() &= ~(1 << PRTIM2);
+                else
+                    regPRR0() |= (1 << PRTIM2);
+            }
+            inline static bool getEnableTimer2()
+            {
+                return regPRR0() & (1 << PRTIM2);
+            }
+
+            inline static void setEnableAdc(bool enable = true)
+            {
+                if (enable)
+                    regPRR0() &= ~(1 << PRADC);
+                else
+                    regPRR0() |= (1 << PRADC);
+            }
+            inline static bool getEnableAdc()
+            {
+                return regPRR0() & (1 << PRADC);
+            }
+
+            inline static void setEnableTwi(bool enable = true)
+            {
+                if (enable)
+                    regPRR0() &= ~(1 << PRTWI);
+                else
+                    regPRR0() |= (1 << PRTWI);
+            }
+            inline static bool getEnableTwi()
+            {
+                return regPRR0() & (1 << PRTWI);
             }
 
         private:
