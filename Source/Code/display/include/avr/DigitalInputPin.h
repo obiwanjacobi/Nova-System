@@ -18,65 +18,75 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-
 #ifndef __DIGITALINPUTPIN_H__
 #define __DIGITALINPUTPIN_H__
 
 #include <stdint.h>
 #include "Port.h"
 
-namespace ATL {
-namespace MCU {
-
-/*
-    Initializes a Pin on a Port to input.
- */
-template <const Ports PortId, const Pins PinId>
-class DigitalInputPin
+namespace ATL
 {
-public:
-    /*
-        The ctor sets the Pin as Input.
-     */
-    DigitalInputPin()
+    namespace MCU
     {
-        Port<PortId>::SetDirection(PinId, Input);
+
+        /*
+            Initializes a Pin on a Port to input.
+         */
+        template <const Ports PortId, const Pins PinId>
+        class DigitalInputPin
+        {
+        public:
+            /*
+                The ctor sets the Pin as Input.
+             */
+            DigitalInputPin()
+            {
+                Port<PortId>::SetDirection(PinId, Input);
+            }
+
+            /*
+                The ctor sets the Pin as Input with pullup.
+            */
+            DigitalInputPin(bool pullup)
+            {
+                Port<PortId>::SetDirection(PinId, Input);
+                Port<PortId>::EnablePullup(PinId, pullup);
+            }
+
+            /*
+                Reads the value from the Pin on the Port.
+             */
+            inline bool Read()
+            {
+                return Port<PortId>::Read(PinId);
+            }
+
+            /*
+                Enables (true) or disables (false) the internal pull-up resistor the AVR (MCU) has on digital input pins.
+             */
+            inline void EnableInternalPullup(bool enable = true)
+            {
+                Port<PortId>::EnablePullup(PinId, enable);
+            }
+
+            /*
+                Returns the PortId template parameter.
+             */
+            inline uint8_t getPortNumber() const
+            {
+                return PortId;
+            }
+
+            /*
+                Returns the PinId template parameter.
+             */
+            inline uint8_t getPinNumber() const
+            {
+                return PinId;
+            }
+        };
+
     }
-
-    /*
-        Reads the value from the Pin on the Port.
-     */
-    inline bool Read()
-    {
-        return Port<PortId>::Read(PinId);
-    }
-
-    /*
-        Enables (true) or disables (false) the internal pull-up resistor the AVR (MCU) has on digital input pins.
-     */
-    inline void EnableInternalPullup(bool enable = true)
-    {
-        Port<PortId>::EnablePullup(PinId, enable);
-    }
-
-    /*
-        Returns the PortId template parameter.
-     */
-    inline uint8_t getPortNumber() const
-    {
-        return PortId;
-    }
-
-    /*
-        Returns the PinId template parameter.
-     */
-    inline uint8_t getPinNumber() const
-    {
-        return PinId;
-    }
-};
-
-}} // ATL::MCU
-
+} // ATL::MCU
 
 #endif /* __DIGITALINPUTPIN_H__ */

@@ -9,19 +9,19 @@
 using namespace ATL;
 using namespace ATL::MCU;
 
-Spi spi(Spi::Role::Master);
+// Spi spi(Spi::Role::Master);
 
-DigitalOutputPin<PortB, Pin5> SpiSck;
-DigitalInputPin<PortB, Pin4> SpiMiso;
-DigitalOutputPin<PortB, Pin3> SpiMosi;
+// DigitalOutputPin<PortB, Pin5> SpiSck;
+// DigitalInputPin<PortB, Pin4> SpiMiso;
+// DigitalOutputPin<PortB, Pin3> SpiMosi;
 
 #ifndef TEST_ON_ARDUINO
-DigitalOutputPin<PortB, Pin0> Enable0;
-DigitalOutputPin<PortD, Pin2> Enable1;
-DigitalOutputPin<PortD, Pin4> EnableG;
+// DigitalOutputPin<PortB, Pin0> Enable0;
+// DigitalOutputPin<PortD, Pin2> Enable1;
+// DigitalOutputPin<PortD, Pin4> EnableG;
 
-DigitalOutputPin<PortC, Pin5> LedOE;
-DigitalOutputPin<PortC, Pin4> LedStrobe;
+// DigitalOutputPin<PortC, Pin5> LedOE;
+// DigitalOutputPin<PortC, Pin4> LedStrobe;
 #endif
 
 #define BufferSize 12
@@ -32,9 +32,9 @@ void Transfer()
     for (uint8_t i = 0; i < BufferSize; i++)
     {
         uint8_t val = buffer.GetAt(i);
-        spi.Write(~val);
-        spi.WaitTransferComplete();
-        val = spi.Read();
+        // spi.Write(~val);
+        // spi.WaitTransferComplete();
+        // val = spi.Read();
         buffer.SetAt(i, ~val);
 
         _delay_us(10);
@@ -43,22 +43,22 @@ void Transfer()
 
 void TestSPI()
 {
-    SpiSck.Write(false);
-    SpiMosi.Write(false);
+    // SpiSck.Write(false);
+    // SpiMosi.Write(false);
 
     led.Write(true);
     _delay_ms(200);
 
-    LedOE.Write(false);
-    LedStrobe.Write(false);
+    // LedOE.Write(false);
+    // LedStrobe.Write(false);
 
-    spi.setClockPolarity(Spi::ClockPolarity::RisingEdge, Spi::ClockPolarity::RisingEdge);
-    spi.setClockPrescaler(Spi::ClockPrescaler::ClockBy4);
-    spi.Enable(true);
+    // spi.setClockPolarity(Spi::ClockPolarity::RisingEdge, Spi::ClockPolarity::RisingEdge);
+    // spi.setClockPrescaler(Spi::ClockPrescaler::ClockBy4);
+    // spi.Enable(true);
 
-    Enable0.Write(true);
-    Enable1.Write(true);
-    EnableG.Write(false);
+    // Enable0.Write(true);
+    // Enable1.Write(true);
+    // EnableG.Write(false);
 
     // buffer.Clear();
     buffer.SetAt(0, 0);
@@ -80,9 +80,9 @@ void TestSPI()
     val = buffer.GetAt(2);
     PrintBinary(1, val);
 
-    LedStrobe.Write(true);
-    spi.Enable(false);
-    LedStrobe.Write(false);
+    // LedStrobe.Write(true);
+    // spi.Enable(false);
+    // LedStrobe.Write(false);
 
     // LedOE.Write(true);
     // LedOE.Write(false);

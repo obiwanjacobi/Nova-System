@@ -53,11 +53,8 @@ namespace ATL
          */
         Task_Begin(Execute)
         {
-            while (true)
-            {
-                Task_YieldUntil(SchedulerT::Wait(BaseT::getId(), Timeout));
-                BaseT::OnTimeout();
-            }
+            Task_YieldUntil(SchedulerT::Wait(BaseT::getId(), Timeout));
+            BaseT::OnTimeout();
         }
         Task_End;
 
