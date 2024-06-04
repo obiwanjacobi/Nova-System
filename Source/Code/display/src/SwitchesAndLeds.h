@@ -62,6 +62,13 @@ enum Digit
     Digit10,
     Digit100
 };
+enum Encoder
+{
+    Encoder0,
+    Encoder1,
+    Encoder2,
+    Encoder3
+};
 
 // Top: LD4, 58, 6, 9, 10, 56, 55, 57
 // bottom: LD1, 2, 5, 3, 7, 8, 11
@@ -81,6 +88,18 @@ static const uint8_t SwitchLedBitTable[SwitchLed::SwitchLedCount] = {
     0, 0, 0, 0, 0, 1, 2, 0, 7, 7, 7, 7, 7, 7, 7};
 
 // digit index: 3, 2, 1
+// digit segments:    A
+// 0 - DP             -
+// 1 - C          F |  | B
+// 2 - B             -   G
+// 3 - A         E |  | C
+// 4 - G            -   . DP
+// 5 - F            D
+// 6 - E
+// 7 - D
+static const uint8_t DigitSegTable[10] = {
+    0b11101110, 0b00000110, 0b11011100, 0b10011110, 0b00110110,
+    0b10111010, 0b11111000, 0b00001110, 0b11111110, 0b10111110};
 
 /** Manages the switches and LEDs.
  * \BaseT implements the swicth handlers.
@@ -100,22 +119,6 @@ public:
         _spi.setClockPrescaler(Spi::ClockPrescaler::ClockBy4);
         _spi.setDataOrder(Spi::DataOrder::MsbFirst);
         _spi.Enable(true);
-    }
-
-    inline void TestPattern()
-    {
-        _leds.SetAt(0, 0);
-        _leds.SetAt(1, 1);
-        _leds.SetAt(2, 1);
-        _leds.SetAt(3, 1);
-        _leds.SetAt(4, 0);
-        _leds.SetAt(5, 0);
-        _leds.SetAt(6, 0);
-        _leds.SetAt(7, 0);
-        _leds.SetAt(8, 0);
-        _leds.SetAt(9, 0x70);
-        _leds.SetAt(10, 0b01100000);
-        _leds.SetAt(11, 0);
     }
 
     inline void SetSwitchedLeds()
@@ -177,6 +180,28 @@ public:
         _leds.SetAt(index, value);
     }
 
+    inline void PrintDigit(Digit digit, uint8_t value)
+    {
+        if (value > 9)
+            SetDigit(digit, 0x10);
+        SetDigit(digit, DigitSegTable[value]);
+    }
+
+    inline void PrintDigits(uint16_t value)
+    {
+        if (value >= 1000)
+        {
+            SetDigit(Digit1, 0x10);
+            SetDigit(Digit10, 0x10);
+            SetDigit(Digit100, 0x10);
+            return;
+        }
+
+        PrintDigit(Digit100, value / 100);
+        PrintDigit(Digit10, value / 10 % 10);
+        PrintDigit(Digit1, value % 10);
+    }
+
     inline void Transfer()
     {
         Selector::Select(Selector::Address::SwitchesAndLeds);
@@ -215,6 +240,7 @@ private:
 
     Array<uint8_t, 12> _leds;
     Array<uint8_t, 3> _switches;
+    uint8_t _encoders;
 
     DigitalOutputPin<PortC, Pin5> _ledOE;
     DigitalOutputPin<PortC, Pin4> _ledStrobe;
