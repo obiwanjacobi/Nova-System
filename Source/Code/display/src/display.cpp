@@ -15,8 +15,6 @@ using namespace ATL::MCU;
 #define LcdColumns 24
 #define LcdLines 2
 
-typedef DigitalOutputPin<PortB, Pin1> LCD_CONTRAST;
-
 typedef HD44780_DisplayWriter<
     TextWriter<
         HD44780_View<
@@ -36,8 +34,15 @@ typedef HD44780_DisplayWriter<
 
 LCD2 lcd;
 
+DigitalOutputPin<PortB, Pin1> lcdContrast;
+
 void InitDisplay()
 {
+    // pwm for contrast
+    OCR1A = 100; // contrast value
+    TCCR1A |= (1 << COM1A1);
+    TCCR1B |= (1 << WGM12) | (1 << CS00);
+
     lcd.Initialize();
     lcd.SetDisplayControl(true, false, false);
 }
