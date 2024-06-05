@@ -50,10 +50,13 @@ int main()
 
         switchesAndLeds.Transfer();
         switchesAndLeds.SetSwitchedLeds();
+        switchesAndLeds.ReadRotaryEncoders();
 
-        //if (counter % 20)
-            switchesAndLeds.ReadRotaryEncoders();
-
+        if (counter % 20)
+        {
+            PrintDecimal(0, switchesAndLeds.getRotaryValue0());
+            PrintDecimal(1, switchesAndLeds.getRotaryValue1());
+        }
         counter++;
     }
 

@@ -254,15 +254,27 @@ public:
 
         Selector::Enable(false);
 
-        PrintBinary(0, data);
-
         _rotary0.setState(data & 0x10, data & 0x20);
         _rotary1.setState(data & 0x01, data & 0x02);
         _rotary2.setState(data & 0x04, data & 0x08);
         _rotary3.setState(data & 0x40, data & 0x80);
+    }
 
-        //PrintDecimal(0, _rotary0.getValue());
-        PrintDecimal(1, _rotary1.getValue());
+    inline uint16_t getRotaryValue0() const
+    {
+        return _rotary0.getValue();
+    }
+    inline uint16_t getRotaryValue1() const
+    {
+        return _rotary1.getValue();
+    }
+    inline uint16_t getRotaryValue2() const
+    {
+        return _rotary2.getValue();
+    }
+    inline uint16_t getRotaryValue3() const
+    {
+        return _rotary3.getValue();
     }
 
 private:
