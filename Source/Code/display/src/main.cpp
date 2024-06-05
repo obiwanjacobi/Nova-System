@@ -39,6 +39,8 @@ int main()
     switchesAndLeds.SetBarLed(Bar2, Led0, true);
     switchesAndLeds.SetBarLed(Bar3, Led3, true);
 
+    uint8_t counter = 0;
+
     while (true)
     {
         TaskScheduler::Update();
@@ -48,6 +50,11 @@ int main()
 
         switchesAndLeds.Transfer();
         switchesAndLeds.SetSwitchedLeds();
+
+        //if (counter % 20)
+            switchesAndLeds.ReadRotaryEncoders();
+
+        counter++;
     }
 
     return 0;

@@ -50,7 +50,8 @@ namespace ATL
         }
 
         /** Call this method repeatedly from the main loop.
-         *  Each time the Timeout expires the BaseT::OnTimeout() method is called.
+         *  When the Timeout1 expires the BaseT::OnTimeout1() method is called.
+         *  Then when the Timeout2 expires the BaseT::OnTimeout2() method is called.
          */
         Task_Begin(Execute)
         {

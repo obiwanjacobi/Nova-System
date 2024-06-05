@@ -1,9 +1,15 @@
 #ifndef __SWITCHES_H__
 #define __SWITCHES_H__
 
+#include "display.h"
+
+#include "Selector.h"
+#include "Rotary_Controller.h"
+#include "Rotary_Driver.h"
+#include "Rotary_Value.h"
+
 #include "Array.h"
 #include "Delay.h"
-#include "Selector.h"
 #include "Spi.h"
 #include "Time.h"
 #include "avr/Delay_Avr.h"
@@ -101,6 +107,10 @@ static const uint8_t DigitSegTable[10] = {
     0b11101110, 0b00000110, 0b11011100, 0b10011110, 0b00110110,
     0b10111010, 0b11111000, 0b00001110, 0b11111110, 0b10111110};
 
+typedef Rotary_Controller<Rotary_Value<Rotary_DriverManual, uint16_t, 999>> RotaryEncoder;
+
+// TODO: Foot switches and leds
+
 /** Manages the switches and LEDs.
  * \BaseT implements the swicth handlers.
  */
@@ -116,7 +126,7 @@ public:
     inline void Initialize()
     {
         _spi.setClockPolarity(Spi::ClockPolarity::RisingEdge, Spi::ClockPolarity::RisingEdge);
-        _spi.setClockPrescaler(Spi::ClockPrescaler::ClockBy4);
+        _spi.setClockPrescaler(Spi::ClockPrescaler::ClockBy8);
         _spi.setDataOrder(Spi::DataOrder::MsbFirst);
         _spi.Enable(true);
     }
@@ -219,7 +229,7 @@ public:
                 _switches.SetAt(i, ~val);
             }
 
-            Delay<Microseconds>::Wait(10);
+            Delay<TimeResolution::Microseconds>::Wait(10);
         }
 
         _ledStrobe.Write(true);
@@ -232,6 +242,29 @@ public:
         _ledOE.Write(enable);
     }
 
+    inline void ReadRotaryEncoders()
+    {
+        Selector::Select(Selector::Address::RotaryEncoders);
+        Selector::Enable(true);
+
+        _spi.Write(0);
+        _spi.WaitTransferComplete();
+        Delay<TimeResolution::Microseconds>::Wait(10);
+        uint8_t data = _spi.Read();
+
+        Selector::Enable(false);
+
+        PrintBinary(0, data);
+
+        _rotary0.setState(data & 0x10, data & 0x20);
+        _rotary1.setState(data & 0x01, data & 0x02);
+        _rotary2.setState(data & 0x04, data & 0x08);
+        _rotary3.setState(data & 0x40, data & 0x80);
+
+        //PrintDecimal(0, _rotary0.getValue());
+        PrintDecimal(1, _rotary1.getValue());
+    }
+
 private:
     Spi _spi;
     DigitalOutputPin<PortB, Pin5> _spiSck;
@@ -240,10 +273,14 @@ private:
 
     Array<uint8_t, 12> _leds;
     Array<uint8_t, 3> _switches;
-    uint8_t _encoders;
 
     DigitalOutputPin<PortC, Pin5> _ledOE;
     DigitalOutputPin<PortC, Pin4> _ledStrobe;
+
+    RotaryEncoder _rotary0;
+    RotaryEncoder _rotary1;
+    RotaryEncoder _rotary2;
+    RotaryEncoder _rotary3;
 };
 
 #endif // __SWITCHES_H__

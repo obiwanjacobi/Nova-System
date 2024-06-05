@@ -65,6 +65,12 @@ void InitDisplay()
     lcd.SetDisplayControl(true, false, false);
 }
 
+void PrintDecimal(uint8_t line, uint8_t value)
+{
+    lcd.GoTo(line, 0);
+    lcd.getBaseRef().Write(value);
+}
+
 void PrintBinary(uint8_t line, uint8_t value)
 {
     lcd.GoTo(line, 0);
