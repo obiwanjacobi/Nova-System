@@ -15,8 +15,6 @@ using namespace ATL::MCU;
 #define LcdColumns 24
 #define LcdLines 2
 
-#ifndef TEST_ON_ARDUINO
-
 typedef DigitalOutputPin<PortB, Pin1> LCD_CONTRAST;
 
 typedef HD44780_DisplayWriter<
@@ -35,27 +33,6 @@ typedef HD44780_DisplayWriter<
             LcdLines,
             LcdColumns>>>
     LCD2;
-
-#else
-
-typedef HD44780_DisplayWriter<
-    TextWriter<
-        HD44780_View<
-            HD44780_Controller2<
-                HD44780_Driver2<
-                    DigitalOutputPin<PortB, Pin2>, // RS
-                    DigitalOutputPin<PortB, Pin1>, // R/W
-                    DigitalOutputPin<PortB, Pin0>, // E
-                    DigitalPin<PortD, Pin4>,       // D0/4
-                    DigitalPin<PortD, Pin5>,       // D1/5
-                    DigitalPin<PortD, Pin6>,       // D2/6
-                    DigitalPin<PortD, Pin7>        // D3/7
-                    >>,
-            2,
-            16>>>
-    LCD2;
-
-#endif // TEST_ON_ARDUINO
 
 LCD2 lcd;
 
